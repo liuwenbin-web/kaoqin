@@ -50,6 +50,10 @@ public class KaoQinController {
 		mav.addObject("kaoqinList", KaoQinUtil.get(dateStr,baseInfo));
 		mav.addObject("userId", userId);
 		mav.addObject("date", dateStr);
+		//正式删除--开始
+		baseInfo.setIsFirstUse("1");
+		//正式删除--结束
+		mav.addObject("baseInfo", baseInfo);
 		mav.addObject("jiaBanDanCount", Constant.jiaBanDanCount);
 		mav.addObject("tiaoXiuDanCount", Constant.tiaoXiuDanCount);
 		return mav;

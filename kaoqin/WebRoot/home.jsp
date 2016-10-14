@@ -5,6 +5,7 @@
 <html>
   <head>
     <title>考勤记录</title>
+    
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -58,6 +59,7 @@
 				<td>正常</td>
 			</tr>
 		</table>
+		<button id="howToUse" class="btn btn-default">如何操作？</button>
 		<div class="btn-group">
 			<button id="zhedieBtn" class="btn btn-default">隐藏正常项</button>
 			<button id="zhengliBtn" class="btn btn-default">整理</button>
@@ -121,7 +123,7 @@
   	</div>
   	
 	<div id="resultModal" class="modal fade">
-	  <div class="modal-dialog" style="width:82%">
+	  <div class="modal-dialog" style="width:90%">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -160,7 +162,7 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	        <h4 class="modal-title">提示信息</h4>
+	        <h4 class="modal-title" id="alertTitle"></h4>
 	      </div>
 	      <div class="modal-body">
 	        <p id="alertContent">
@@ -173,8 +175,26 @@
 	    </div><!-- /.modal-content -->
 	 </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
-	
   	<script type="text/javascript">
+  		$("#howToUse").click(function(){
+  			showHowToUse();
+  		});
+  		function showHowToUse(){
+  			var stepContent = "<table style='width:100%'><tr><td><b>请按照下面的步骤顺序执行：</b></td></tr><tr><td><code>第一步</code> 点击下图中的\"整理\"按钮，进行数据整理</td></tr>";
+  			stepContent += "<tr><td><img src='img/step1.jpg' style='width:75%'/></td></tr>";
+  			stepContent += "<tr><td>整理之后的数据是按照时间的顺序进行排列的，可以和左侧的数据进行对比查看，判断数据是否正确。如果不正确，请手动进行整理。如果数据正确，可以执行第二步</td></tr>";
+  			stepContent += "<tr><td><code>第二步</code> 点击\"查看最终结果按钮\"，生成最终结果。如下图</td></tr>";
+  			stepContent += "<tr><td><img src='img/step2.jpg' style='width:75%'/></td></tr>";
+  			stepContent += "<tr><td>最终数据是按照类型进行排列的，方便填写加班和调休单，如下图</td></tr>";
+  			stepContent += "<tr><td><img src='img/step3.jpg' style='width:75%'/></td></tr>";
+  			stepContent += "<tr><td>另外可以直接下载或在线打印加班调休单。如下图</td></tr>";
+  			stepContent += "<tr><td><img src='img/step4.jpg' style='width:75%'/></td></tr>";
+  			stepContent += "</table>";
+  			alert("使用步骤说明",stepContent,true,"70%");
+  		}
+  		if("1" == "${baseInfo.isFirstUse}"){
+  			showHowToUse();
+  		}
   		$("#zhedieBtn").click(function(){
   			if($(this).html()=="隐藏正常项"){
   				$(".normal").hide(300);
@@ -317,7 +337,7 @@
   			$(".result").hide();
   			//获取第一个
   			if($(".zhengli").eq(0).html() == undefined){
-  				alert("没有需要整理的加班或调休");
+  				alert("提示信息","没有需要整理的加班或调休",true,"40%");
   				$("#zhengliBtn").html("整理");
   				$(".status").hide();
 				$("#info").html("");
@@ -331,7 +351,7 @@
   			}
   		});
   		
-  		function alert(str,showClose,width){
+  		function alert(title,str,showClose,width){
   			//backdrop
   			$("#alertModal .modal-dialog").css("width",width);
   			if(showClose){
@@ -344,6 +364,7 @@
 			});
   			$("#alertModal").modal("show");
   			$("#alertContent").html(str);
+  			$("#alertTitle").html(title);
   		}
   	</script>
   </body>
