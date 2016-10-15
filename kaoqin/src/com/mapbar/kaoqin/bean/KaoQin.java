@@ -1,8 +1,5 @@
 package com.mapbar.kaoqin.bean;
 
-import java.util.List;
-
-import com.mapbar.kaoqin.util.KaoQinUtil;
 
 public class KaoQin {
 	private String date;

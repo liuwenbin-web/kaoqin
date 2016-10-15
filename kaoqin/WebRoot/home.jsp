@@ -181,14 +181,14 @@
   		});
   		function showHowToUse(){
   			var stepContent = "<table style='width:100%'><tr><td><b>请按照下面的步骤顺序执行：</b></td></tr><tr><td><code>第一步</code> 点击下图中的\"整理\"按钮，进行数据整理</td></tr>";
-  			stepContent += "<tr><td><img src='img/step1.jpg' style='width:75%'/></td></tr>";
+  			stepContent += "<tr><td><img src='img/step1.png'/></td></tr>";
   			stepContent += "<tr><td>整理之后的数据是按照时间的顺序进行排列的，可以和左侧的数据进行对比查看，判断数据是否正确。如果不正确，请手动进行整理。如果数据正确，可以执行第二步</td></tr>";
   			stepContent += "<tr><td><code>第二步</code> 点击\"查看最终结果按钮\"，生成最终结果。如下图</td></tr>";
-  			stepContent += "<tr><td><img src='img/step2.jpg' style='width:75%'/></td></tr>";
+  			stepContent += "<tr><td><img src='img/step2.png'/></td></tr>";
   			stepContent += "<tr><td>最终数据是按照类型进行排列的，方便填写加班和调休单，如下图</td></tr>";
-  			stepContent += "<tr><td><img src='img/step3.jpg' style='width:75%'/></td></tr>";
+  			stepContent += "<tr><td><img src='img/step3.png' style='width:75%'/></td></tr>";
   			stepContent += "<tr><td>另外可以直接下载或在线打印加班调休单。如下图</td></tr>";
-  			stepContent += "<tr><td><img src='img/step4.jpg' style='width:75%'/></td></tr>";
+  			stepContent += "<tr><td><img src='img/step4.png' style='width:75%'/></td></tr>";
   			stepContent += "</table>";
   			alert("使用步骤说明",stepContent,true,"70%");
   		}

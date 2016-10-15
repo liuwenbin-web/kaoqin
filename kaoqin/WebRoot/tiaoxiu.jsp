@@ -285,7 +285,34 @@ ul {
 -->
 </style>
 </head>
-
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jPrintArea.js"></script>
+<button id="dayinBtn">打印</button>
+<button id="editBtn">编辑</button>
+<script>
+	window.onload=function(){
+		$("#dayinBtn").click(function(){
+			$("body").printArea(); 
+		});
+		$("#editBtn").click(function(){
+				if($("#editBtn").html() == "编辑"){
+					$(".e").each(function(i,n){
+						var content = $(n).html();
+						var len = content.length;
+						$(n).html("<input value='"+content+"' style='width:"+16 * len+"px'/>");
+					});
+					$("#editBtn").html("取消编辑");
+				}else{
+					$(".e").each(function(i,n){
+						var content = $(n).children("input").val();
+						$(n).html(content);
+					});
+					$("#editBtn").html("编辑");
+				}
+		});
+	}
+</script>
+<hr/>
 <body lang=ZH-CN
 	style='tab-interval:21.0pt;text-justify-trim:punctuation'>
 
@@ -335,7 +362,7 @@ line-height:50%'>
   padding:0cm 5.4pt 0cm 5.4pt;height:32.55pt'><span
 						style='mso-bookmark:OLE_LINK1'></span>
 						<p class=MsoNormal align=center style='text-align:center'>
-							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US><o:p>${userName}</o:p>
+							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US><o:p class="e">${userName}</o:p>
 							</span>
 							</span>
 						</p></td>
@@ -357,7 +384,7 @@ line-height:50%'>
   padding:0cm 5.4pt 0cm 5.4pt;height:32.55pt'><span
 						style='mso-bookmark:OLE_LINK1'></span>
 						<p class=MsoNormal align=center style='text-align:center'>
-							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US><o:p>${department}</o:p>
+							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US><o:p class="e">${department}</o:p>
 							</span>
 							</span>
 						</p></td>
@@ -379,7 +406,7 @@ line-height:50%'>
   padding:0cm 5.4pt 0cm 5.4pt;height:32.55pt'><span
 						style='mso-bookmark:OLE_LINK1'></span>
 						<p class=MsoNormal align=center style='text-align:center'>
-							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US><o:p>${date}</o:p>
+							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US><o:p class="e">${date}</o:p>
 							</span>
 							</span>
 						</p></td>
@@ -472,33 +499,33 @@ line-height:50%'>
 								style='font-family:宋体'>${i.index + 1}</span>
 							</span><span style='mso-bookmark:OLE_LINK1'><span
 								style='font-family:宋体'>、从<u><span lang=EN-US><span
-											style='mso-spacerun:yes'>${tiaoxiu.year}</span>
+											style='mso-spacerun:yes' class="e">${tiaoxiu.year}</span>
 									</span>
 								</u>年<u> <span style='mso-spacerun:yes'></span><span
-										lang=EN-US><span style='mso-spacerun:yes'>${tiaoxiu.month}</span>
+										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.month}</span>
 									</span>
 								</u>月<u> <span style='mso-spacerun:yes'></span><span
-										lang=EN-US><span style='mso-spacerun:yes'>${tiaoxiu.day}</span>
+										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.day}</span>
 									</span>
 								</u>日<u> <span style='mso-spacerun:yes'></span><span
-										lang=EN-US><span style='mso-spacerun:yes'>${tiaoxiu.startTimeHour}</span>
+										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.startTimeHour}</span>
 									</span>
 								</u>时<u> <span style='mso-spacerun:yes'></span><span
-										lang=EN-US><span style='mso-spacerun:yes'>${tiaoxiu.startTimeMin}</span>
+										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.startTimeMin}</span>
 									</span>
 								</u>分至<u><span lang=EN-US><span style='mso-spacerun:yes'>
-										</span><span style='mso-spacerun:yes'>${tiaoxiu.month}</span><span
+										</span><span style='mso-spacerun:yes' class="e">${tiaoxiu.month}</span><span
 											style='mso-spacerun:yes'></span>
 									</span>
 								</u>月<u><span lang=EN-US><span style='mso-spacerun:yes'>
-										</span><span style='mso-spacerun:yes'>${tiaoxiu.day}</span><span
+										</span><span style='mso-spacerun:yes' class="e">${tiaoxiu.day}</span><span
 											style='mso-spacerun:yes'></span>
 									</span>
 								</u>日<u> <span style='mso-spacerun:yes'></span><span
-										lang=EN-US><span style='mso-spacerun:yes'>${tiaoxiu.endTimeHour}</span>
+										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.endTimeHour}</span>
 									</span>
 								</u>时<u> <span style='mso-spacerun:yes'></span><span
-										lang=EN-US><span style='mso-spacerun:yes'>${tiaoxiu.endTimeMin}</span>
+										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.endTimeMin}</span>
 									</span>
 								</u>分 类别<span lang=EN-US>________<o:p></o:p>
 								</span>
