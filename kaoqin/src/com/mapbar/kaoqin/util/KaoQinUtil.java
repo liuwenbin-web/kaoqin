@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mapbar.kaoqin.bean.BaseInfo;
+import com.mapbar.kaoqin.bean.DocBean;
 import com.mapbar.kaoqin.bean.KaoQin;
 import com.mapbar.kaoqin.bean.OrderInfo;
 
@@ -39,6 +40,7 @@ public class KaoQinUtil {
 		int allowLate = 0;
 		for(int day = 1;day <= allDays;day ++){
 			kaoQin = new KaoQin();
+			kaoQin.setInTenMin(0);
 			begin = "";
 			end = "";
 			dateString = year+"-"+month+"-"+day;
@@ -63,8 +65,13 @@ public class KaoQinUtil {
 				kaoQin.setStartTime(begin.replaceAll(dateString + " ", ""));
 				kaoQin.setEndTime(end.replaceAll(dateString + " ", ""));
 				if("true".equals(kaoQin.getIsHoliday())){
-					kaoQin.setColor("加班");
-					kaoQin.setIsHoliday("false");
+					if(kaoQin.getStartTime().equals(kaoQin.getEndTime())){
+						kaoQin.setColor("正常");
+						kaoQin.setIsHoliday("true");
+					}else{
+						kaoQin.setColor("加班");
+						kaoQin.setIsHoliday("false");
+					}
 				}else if(kaoQin.getStartTime().equals(kaoQin.getEndTime())){
 					kaoQin.setColor("忘打卡");
 				}else{
@@ -73,6 +80,7 @@ public class KaoQinUtil {
 					if("in".equals(lateType)){
 						allowLate ++;
 						if(allowLate <= 3){
+							kaoQin.setInTenMin(allowLate);
 							kaoQin.setColor("正常");
 						}else{
 							kaoQin.setColor("调休");
@@ -132,10 +140,6 @@ public class KaoQinUtil {
 		return "normal";
 	}
 	
-//	public static void main(String[] args) throws Exception {
-//		System.out.println(new Gson().toJson(get("/3/4/15/16/17/10/11/24/25/")));
-//	}
-	
 	public static String getAfterHalfTime(String time){
 		if(time.endsWith("00") || time.endsWith("30")){
 			return time;
@@ -177,10 +181,6 @@ public class KaoQinUtil {
 		return inter;
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(getInterval("9:00", "18:00", 1));
-	}
-	
 	/**
 	 * 获取加班
 	 * @param startTime
@@ -192,9 +192,14 @@ public class KaoQinUtil {
 			return null;
 		}
 		OrderInfo orderInfo = new OrderInfo();
+		orderInfo.setDakaStartTime(startTime);
+		orderInfo.setDakaEndTime(endTime);
 		orderInfo.setDate(date);
 		orderInfo.setType("jiaban");
 		if(isHoliday){
+			if(startTime.equals(endTime)){
+				return null;
+			}
 			startTime = getAfterHalfTime(startTime);
 			endTime = getBeforeHalfTime(endTime);
 			orderInfo.setInterval(getInterval(startTime, endTime, 0));
@@ -226,6 +231,8 @@ public class KaoQinUtil {
 		String st = null;
 		if(null == startTime || "".equals(startTime) || null == endTime || "".equals(endTime)){
 			orderInfo = new OrderInfo();
+			orderInfo.setDakaStartTime(startTime);
+			orderInfo.setDakaEndTime(endTime);
 			orderInfo.setDate(date);
 			orderInfo.setType("tiaoxiu");
 			
@@ -242,6 +249,8 @@ public class KaoQinUtil {
 		if(startTime.equals(endTime)){
 			//忘记打卡
 			orderInfo = new OrderInfo();
+			orderInfo.setDakaStartTime(startTime);
+			orderInfo.setDakaEndTime(endTime);
 			orderInfo.setDate(date);
 			orderInfo.setType("wangdaka");
 			
@@ -259,9 +268,10 @@ public class KaoQinUtil {
 		int eti = DateUtil.getIntVal(endTime);
 		//开始和结束时间都在12点之后
 		if(sti > baseInfo.getHalfBeginTime() && eti > baseInfo.getHalfBeginTime() || eti <= baseInfo.getStartWorkTime()){
-			System.out.println("开始和结束时间都在12点之后");
 			//整上午调休
 			orderInfo = new OrderInfo();
+			orderInfo.setDakaStartTime(startTime);
+			orderInfo.setDakaEndTime(endTime);
 			orderInfo.setDate(date);
 			orderInfo.setType("tiaoxiu");
 			
@@ -277,8 +287,9 @@ public class KaoQinUtil {
 		//计算上午的调休
 		//开始时间在9点以后(但是在12点之前)，并且结束时间在12点以后的情况
 		if(sti > baseInfo.getStartWorkTime() && sti <= baseInfo.getHalfBeginTime() && eti > baseInfo.getHalfBeginTime()){
-			System.out.println("开始时间在9点以后(但是在12点之前)，并且结束时间在12点以后的情况");
 			orderInfo = new OrderInfo();
+			orderInfo.setDakaStartTime(startTime);
+			orderInfo.setDakaEndTime(endTime);
 			orderInfo.setDate(date);
 			orderInfo.setType("tiaoxiu");
 			
@@ -293,8 +304,9 @@ public class KaoQinUtil {
 		}
 		//开始时间在9点以后(但是在12点之前)，并且结束时间在12点之前的情况
 		if(sti > baseInfo.getStartWorkTime() && sti <= baseInfo.getHalfBeginTime() && eti <= baseInfo.getHalfBeginTime()){
-			System.out.println("开始时间在9点以后(但是在12点之前)，并且结束时间在12点之前的情况");
 			orderInfo = new OrderInfo();
+			orderInfo.setDakaStartTime(startTime);
+			orderInfo.setDakaEndTime(endTime);
 			orderInfo.setDate(date);
 			orderInfo.setType("tiaoxiu");
 			
@@ -308,6 +320,8 @@ public class KaoQinUtil {
 			}
 			//时间分两段
 			orderInfo = new OrderInfo();
+			orderInfo.setDakaStartTime(startTime);
+			orderInfo.setDakaEndTime(endTime);
 			orderInfo.setDate(date);
 			orderInfo.setType("tiaoxiu");
 			
@@ -322,8 +336,9 @@ public class KaoQinUtil {
 		}
 		//开始时间在9点之前，并且结束时间在12点之前（在9点之后）的情况
 		if(sti <= baseInfo.getStartWorkTime() && eti < baseInfo.getHalfBeginTime() && eti > baseInfo.getStartWorkTime()){
-			System.out.println("开始时间在9点之前，并且结束时间在12点之前的情况");
 			orderInfo = new OrderInfo();
+			orderInfo.setDakaStartTime(startTime);
+			orderInfo.setDakaEndTime(endTime);
 			orderInfo.setDate(date);
 			orderInfo.setType("tiaoxiu");
 			
@@ -339,8 +354,9 @@ public class KaoQinUtil {
 		//下午的调休
 		//开始时间在13点之前，结束时间在18点之前（但是在13点之后）的情况。
 		if(sti < baseInfo.getHalfEndTime() && eti < baseInfo.getEndWorkTime() && eti > baseInfo.getHalfEndTime()){
-			System.out.println("开始时间在13点之前，结束时间在18点之前（但是在13点之后）的情况。");
 			orderInfo = new OrderInfo();
+			orderInfo.setDakaStartTime(startTime);
+			orderInfo.setDakaEndTime(endTime);
 			orderInfo.setDate(date);
 			orderInfo.setType("tiaoxiu");
 			
@@ -355,8 +371,9 @@ public class KaoQinUtil {
 		}
 		//开始时间在13点之后（在18点之前），结束时间在18点之后的情况。
 		if(sti > baseInfo.getHalfEndTime() && eti > baseInfo.getEndWorkTime() && sti < baseInfo.getEndWorkTime()){
-			System.out.println("开始时间在13点之后，结束时间在18点之后的情况。");
 			orderInfo = new OrderInfo();
+			orderInfo.setDakaStartTime(startTime);
+			orderInfo.setDakaEndTime(endTime);
 			orderInfo.setDate(date);
 			orderInfo.setType("tiaoxiu");
 			
@@ -371,8 +388,9 @@ public class KaoQinUtil {
 		}
 		//开始时间在13点以后(但是在18点之前)，并且结束时间在18点之前的情况
 		if(sti >= baseInfo.getHalfEndTime() && sti <= baseInfo.getEndWorkTime() && eti <= baseInfo.getEndWorkTime()){
-			System.out.println("开始时间在13点以后(但是在18点之前)，并且结束时间在18点之前的情况");
 			orderInfo = new OrderInfo();
+			orderInfo.setDakaStartTime(startTime);
+			orderInfo.setDakaEndTime(endTime);
 			orderInfo.setDate(date);
 			orderInfo.setType("tiaoxiu");
 			
@@ -386,6 +404,8 @@ public class KaoQinUtil {
 			}
 			//时间分两段
 			orderInfo = new OrderInfo();
+			orderInfo.setDakaStartTime(startTime);
+			orderInfo.setDakaEndTime(endTime);
 			orderInfo.setDate(date);
 			orderInfo.setType("tiaoxiu");
 			
@@ -400,9 +420,10 @@ public class KaoQinUtil {
 		}
 		//开始和结束时间都在13点之前
 		if((sti < baseInfo.getHalfEndTime() && eti <= baseInfo.getHalfEndTime()) || sti >= baseInfo.getEndWorkTime()){
-			System.out.println("开始和结束时间都在13点之前");
 			//整下午调休
 			orderInfo = new OrderInfo();
+			orderInfo.setDakaStartTime(startTime);
+			orderInfo.setDakaEndTime(endTime);
 			orderInfo.setDate(date);
 			orderInfo.setType("tiaoxiu");
 			
@@ -425,6 +446,8 @@ public class KaoQinUtil {
 			if(firstOrderInfo.getEndTime().equals(baseInfo.getHalfBeginTimeStr()) && secondOrderInfo.getStartTime().equals(baseInfo.getHalfEndTimeStr())){
 				orderInfos = new ArrayList<OrderInfo>();
 				OrderInfo oInfo = new OrderInfo();
+				oInfo.setDakaStartTime(startTime);
+				oInfo.setDakaEndTime(endTime);
 				oInfo.setDate(date);
 				oInfo.setEndTime(secondOrderInfo.getEndTime());
 				oInfo.setStartTime(firstOrderInfo.getStartTime());
@@ -466,5 +489,16 @@ public class KaoQinUtil {
 			baseInfo.setStartWorkTimeStr("10:00");
 			baseInfo.setEndWorkTimeStr("19:00");
 		}
+	}
+	
+	public static String getTotalHour(List<DocBean> docBeans){
+		double total = 0;
+		for (DocBean docBean : docBeans) {
+			if(docBean.getInterval() == null){
+				continue;
+			}
+			total += Double.parseDouble(docBean.getInterval());
+		}
+		return NumUtil.formatDouble(total);
 	}
 }

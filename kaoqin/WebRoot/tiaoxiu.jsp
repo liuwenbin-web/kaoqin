@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html xmlns:v="urn:schemas-microsoft-com:vml"
 	xmlns:o="urn:schemas-microsoft-com:office:office"
 	xmlns:w="urn:schemas-microsoft-com:office:word"
@@ -289,46 +290,63 @@ ul {
 <script src="/js/jPrintArea.js"></script>
 <button id="dayinBtn">打印</button>
 <button id="editBtn">编辑</button>
+<br/>
+<c:if test="${hasWangdaka == '1'}">
+	<hr/>
+	该月有忘打卡的记录，请点击上面的“编辑”按钮进行手动添加<br/>
+	<c:forEach items="${wangdakaList}" var="wang">
+		忘打卡日期：${wang.year}-${wang.month}-${wang.day}&nbsp;&nbsp;打卡时间：${wang.startTimeHour}:${wang.startTimeMin}<br/>
+	</c:forEach>
+</c:if>
 <script>
 	window.onload=function(){
 		$("#dayinBtn").click(function(){
-			$("body").printArea(); 
+			if($("#editBtn").html() == "取消编辑"){
+				$("#editBtn").click();
+			}
+			$("#printArea").printArea(); 
 		});
 		$("#editBtn").click(function(){
-				if($("#editBtn").html() == "编辑"){
-					$(".e").each(function(i,n){
-						var content = $(n).html();
-						var len = content.length;
+			if($("#editBtn").html() == "编辑"){
+				$(".e").each(function(i,n){
+					var content = $(n).html();
+					var len = content.length;
+					if($.trim(content).indexOf("&nbsp;")!=-1 || $.trim(content) == ""){
+						$(n).html("<input value='' style='width:50px'/>");
+					}else{
 						$(n).html("<input value='"+content+"' style='width:"+16 * len+"px'/>");
-					});
-					$("#editBtn").html("取消编辑");
-				}else{
-					$(".e").each(function(i,n){
-						var content = $(n).children("input").val();
-						$(n).html(content);
-					});
-					$("#editBtn").html("编辑");
-				}
+					}
+				});
+				$("#editBtn").html("取消编辑");
+			}else{
+				$(".e").each(function(i,n){
+					var input = $(n).children("input");
+					var content = input.val();
+					if(content == ""){
+						if($(n).attr("class").indexOf("typeSpan") != -1){
+							$(n).html("");
+						}else{
+							$(n).html("&nbsp;&nbsp;&nbsp;");
+						}
+					}else{
+						$(n).html(content);						
+					}
+				});
+				$("#editBtn").html("编辑");
+			}
 		});
 	}
 </script>
 <hr/>
 <body lang=ZH-CN
 	style='tab-interval:21.0pt;text-justify-trim:punctuation'>
-
+	<div id="printArea">
+	<c:forEach items="${pages}" var="list" varStatus="page">
+	<div style="width:100%;height:13px"></div>
 	<div class=WordSection1 style='layout-grid:15.6pt'>
 
-		<p class=MsoNormal style='margin-bottom:12.0pt;line-height:50%'>
-			<a name="OLE_LINK1"><span lang=EN-US
-				style='font-size:14.0pt;line-height:50%;
-font-family:黑体;mso-hansi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p>
-			</span>
-			</a>
-		</p>
-
 		<p class=MsoNormal align=center
-			style='margin-bottom:12.0pt;text-align:center;
-line-height:50%'>
+			style='margin-bottom:12.0pt;text-align:center; line-height:50%'>
 			<span style='mso-bookmark:OLE_LINK1'><span
 				style='font-size:
 14.0pt;line-height:50%;font-family:黑体;mso-hansi-font-family:"Times New Roman"'>请
@@ -339,7 +357,6 @@ line-height:50%'>
 		</p>
 
 		<div align=center>
-
 			<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
 				width=100%
 				style='border-collapse:collapse;mso-table-layout-alt:fixed;border:none;
@@ -499,93 +516,71 @@ line-height:50%'>
 								style='font-family:宋体'>${i.index + 1}</span>
 							</span><span style='mso-bookmark:OLE_LINK1'><span
 								style='font-family:宋体'>、从<u><span lang=EN-US><span
-											style='mso-spacerun:yes' class="e">${tiaoxiu.year}</span>
+											style='mso-spacerun:yes' class="e">${tiaoxiu.year == null?"&nbsp;&nbsp;&nbsp;&nbsp;":tiaoxiu.year}</span>
 									</span>
 								</u>年<u> <span style='mso-spacerun:yes'></span><span
-										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.month}</span>
+										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.month == null?"&nbsp;&nbsp;":tiaoxiu.month}</span>
 									</span>
 								</u>月<u> <span style='mso-spacerun:yes'></span><span
-										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.day}</span>
+										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.day == null?"&nbsp;&nbsp;":tiaoxiu.day}</span>
 									</span>
 								</u>日<u> <span style='mso-spacerun:yes'></span><span
-										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.startTimeHour}</span>
+										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.startTimeHour == null?"&nbsp;&nbsp;":tiaoxiu.startTimeHour}</span>
 									</span>
 								</u>时<u> <span style='mso-spacerun:yes'></span><span
-										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.startTimeMin}</span>
+										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.startTimeMin == null?"&nbsp;&nbsp;":tiaoxiu.startTimeMin}</span>
 									</span>
 								</u>分至<u><span lang=EN-US><span style='mso-spacerun:yes'>
-										</span><span style='mso-spacerun:yes' class="e">${tiaoxiu.month}</span><span
+										</span><span style='mso-spacerun:yes' class="e">${tiaoxiu.month == null?"&nbsp;&nbsp;":tiaoxiu.month}</span><span
 											style='mso-spacerun:yes'></span>
 									</span>
 								</u>月<u><span lang=EN-US><span style='mso-spacerun:yes'>
-										</span><span style='mso-spacerun:yes' class="e">${tiaoxiu.day}</span><span
+										</span><span style='mso-spacerun:yes' class="e">${tiaoxiu.day == null?"&nbsp;&nbsp;":tiaoxiu.day}</span><span
 											style='mso-spacerun:yes'></span>
 									</span>
 								</u>日<u> <span style='mso-spacerun:yes'></span><span
-										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.endTimeHour}</span>
+										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.endTimeHour == null?"&nbsp;&nbsp;":tiaoxiu.endTimeHour}</span>
 									</span>
 								</u>时<u> <span style='mso-spacerun:yes'></span><span
-										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.endTimeMin}</span>
+										lang=EN-US><span style='mso-spacerun:yes' class="e">${tiaoxiu.endTimeMin == null?"&nbsp;&nbsp;":tiaoxiu.endTimeMin}</span>
 									</span>
-								</u>分 类别<span lang=EN-US>________<o:p></o:p>
+								</u>分 类别<span lang=EN-US>____<span class="e typeSpan">${tiaoxiu.year == null?"":"G"}</span>____<o:p></o:p>
 								</span>
 							</span>
 							</span>
 						</p>
-						
-						<p class=MsoNormal
+						<div style="width:100%;height:3px"></div>
+						<!-- <p class=MsoNormal
 							style='text-align:justify;text-justify:inter-ideograph'>
 							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US
 								style='font-family:宋体'><o:p>&nbsp;</o:p>
 							</span>
 							</span>
-						</p>
-						<p class=MsoNormal
-							style='text-align:justify;text-justify:inter-ideograph'>
-							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US
-								style='font-family:宋体'><o:p>&nbsp;</o:p>
-							</span>
-							</span>
-						</p>
+						</p> -->
 						</c:forEach>
 						<p class=MsoNormal
 							style='text-align:justify;text-justify:inter-ideograph'>
 							<span style='mso-bookmark:OLE_LINK1'><span
-								style='font-family:宋体'>类别合计：<span lang=EN-US>_________________________________________________________<span
+								style='font-family:宋体'>类别合计：<span lang=EN-US>______________________<span class="e">${totalHourMap[page.count]}</span> h___________________________________<span
 										style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>
 									<o:p></o:p>
 								</span>
 							</span>
 							</span>
 						</p>
+						
 						<p class=MsoNormal
 							style='text-align:justify;text-justify:inter-ideograph;
   text-indent:54.0pt;mso-char-indent-count:4.5'>
-							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US
-								style='font-family:宋体'><o:p>&nbsp;</o:p>
-							</span>
-							</span>
-						</p>
-						<p class=MsoNormal
-							style='text-align:justify;text-justify:inter-ideograph;
-  text-indent:54.0pt;mso-char-indent-count:4.5'>
-							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US
-								style='font-family:宋体'><span style='mso-spacerun:yes'>&nbsp;</span>(</span>
-							</span><span style='mso-bookmark:
+							<span style='mso-bookmark:
   OLE_LINK1'><span
-								style='font-family:宋体'>注：请写出各类假期的合计，不足一天请按小时填写<span
+								style='font-family:宋体'>(注：请写出各类假期的合计，不足一天请按小时填写<span
 									lang=EN-US>)<o:p></o:p>
 								</span>
 							</span>
 							</span>
-						</p> <span style='mso-bookmark:OLE_LINK1'></span>
-						<p class=MsoNormal
-							style='text-align:justify;text-justify:inter-ideograph'>
-							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US
-								style='font-family:宋体'><o:p>&nbsp;</o:p>
-							</span>
-							</span>
-						</p></td>
+						</p> 
+						</td>
 					<span style='mso-bookmark:OLE_LINK1'></span>
 				</tr>
 				<tr style='mso-yfti-irow:3;page-break-inside:avoid;height:32.55pt'>
@@ -605,12 +600,7 @@ line-height:50%'>
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
   solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
   solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:32.55pt'><span
-						style='mso-bookmark:OLE_LINK1'></span>
-						<p class=MsoNormal align=center style='text-align:center'>
-							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US><o:p>&nbsp;</o:p>
-							</span>
-							</span>
-						</p></td>
+						style='mso-bookmark:OLE_LINK1'></span></td>
 					<span style='mso-bookmark:OLE_LINK1'></span>
 					<td width=76
 						style='width:75.7pt;border-top:none;border-left:none;border-bottom:
@@ -620,27 +610,17 @@ line-height:50%'>
 						<p class=MsoNormal align=center style='text-align:center'>
 							<span style='mso-bookmark:OLE_LINK1'><span
 								style='font-family:宋体;mso-ascii-font-family:
-  "Times New Roman";mso-hansi-font-family:"Times New Roman"'>申请人</span>
+  "Times New Roman";mso-hansi-font-family:"Times New Roman"'>申请人签字</span>
 							</span>
 						</p>
-						<p class=MsoNormal align=center style='text-align:center'>
-							<span style='mso-bookmark:OLE_LINK1'><span
-								style='font-family:宋体;mso-ascii-font-family:
-  "Times New Roman";mso-hansi-font-family:"Times New Roman"'>签字</span>
-							</span>
-						</p></td>
+						</td>
 					<span style='mso-bookmark:OLE_LINK1'></span>
 					<td width=95
 						style='width:94.65pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:32.55pt'><span
-						style='mso-bookmark:OLE_LINK1'></span>
-						<p class=MsoNormal align=center style='text-align:center'>
-							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US><o:p>&nbsp;</o:p>
-							</span>
-							</span>
-						</p></td>
+						style='mso-bookmark:OLE_LINK1'></span></td>
 					<span style='mso-bookmark:OLE_LINK1'></span>
 					<td width=66
 						style='width:66.25pt;border-top:none;border-left:none;
@@ -659,12 +639,7 @@ line-height:50%'>
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:32.55pt'><span
-						style='mso-bookmark:OLE_LINK1'></span>
-						<p class=MsoNormal align=center style='text-align:center'>
-							<span style='mso-bookmark:OLE_LINK1'><span lang=EN-US><o:p>&nbsp;</o:p>
-							</span>
-							</span>
-						</p></td>
+						style='mso-bookmark:OLE_LINK1'></span></td>
 					<span style='mso-bookmark:OLE_LINK1'></span>
 				</tr>
 				<tr style='mso-yfti-irow:4;mso-yfti-lastrow:yes;height:32.55pt'>
@@ -749,13 +724,6 @@ line-height:50%'>
 		</div>
 
 		<span style='mso-bookmark:OLE_LINK1'></span>
-
-		<p class=MsoNormal>
-			<b style='mso-bidi-font-weight:normal'><span lang=EN-US><o:p>&nbsp;</o:p>
-			</span>
-			</b>
-		</p>
-
 		<p class=MsoNormal>
 			<b style='mso-bidi-font-weight:normal'><span
 				style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
@@ -799,7 +767,8 @@ normal'><span lang=EN-US>3</span>
 		</p>
 
 	</div>
-
+</c:forEach>
+</div>
 </body>
 
 </html>

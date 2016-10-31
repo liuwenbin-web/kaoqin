@@ -19,7 +19,6 @@ public class HolidayUtil {
 		if(!holidayMap.containsKey(date)){
 			holidayMap = new HashMap<String, String>();
 		}else{
-			System.out.println("from file");
 			return holidayMap.get(date);
 		}
 		Calendar c = Calendar.getInstance();
@@ -69,10 +68,6 @@ public class HolidayUtil {
 		return result;
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(get(2016, 9));
-	}
-	
 	/**
 	 * @param urlAll
 	 *            :请求接口
@@ -108,6 +103,4 @@ public class HolidayUtil {
 	    }
 	    return result;
 	}
-	
 }
-

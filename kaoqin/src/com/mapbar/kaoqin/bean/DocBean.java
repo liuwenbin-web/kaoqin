@@ -3,6 +3,10 @@ package com.mapbar.kaoqin.bean;
 import java.io.Serializable;
 
 public class DocBean implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String type;
 	private String year;
 	private String month;

@@ -1,7 +1,6 @@
 package com.mapbar.kaoqin.bean;
 
 import java.io.Serializable;
-import java.net.URLEncoder;
 import java.util.Date;
 
 public class BaseInfo implements Serializable{

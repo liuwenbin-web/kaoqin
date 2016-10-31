@@ -12,6 +12,8 @@ public class OrderInfo implements Serializable{
 	private String endTime;
 	private String type;
 	private String interval;
+	private String dakaStartTime;
+	private String dakaEndTime;
 	
 	public String getDate() {
 		return date;
@@ -43,5 +45,16 @@ public class OrderInfo implements Serializable{
 	public void setInterval(String interval) {
 		this.interval = interval;
 	}
-	
+	public String getDakaStartTime() {
+		return dakaStartTime;
+	}
+	public void setDakaStartTime(String dakaStartTime) {
+		this.dakaStartTime = dakaStartTime;
+	}
+	public String getDakaEndTime() {
+		return dakaEndTime;
+	}
+	public void setDakaEndTime(String dakaEndTime) {
+		this.dakaEndTime = dakaEndTime;
+	}
 }

@@ -1,3 +1,5 @@
+<%@page import="com.mapbar.kaoqin.util.DownLoadSave"%>
+<%@page import="com.mapbar.kaoqin.bean.DownLoadBean"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -15,8 +17,28 @@
 		String type = request.getParameter("t");
 		if(null == type || "".equals(type)){
 			type = "jiaban";
+			DownLoadBean downLoadBean = DownLoadSave.fileToObject();
+			if(downLoadBean == null){
+				downLoadBean = new DownLoadBean();
+				downLoadBean.setDownLoadJiaban(0);
+				downLoadBean.setDownLoadTiaoxiu(0);
+				downLoadBean.setPrintJiaban(0);
+				downLoadBean.setPrintTiaoxiu(0);
+			}
+			downLoadBean.setPrintJiaban(downLoadBean.getPrintJiaban() + 1);
+			DownLoadSave.objectToFile(downLoadBean);
 		}else{
 			type = "tiaoxiu";
+			DownLoadBean downLoadBean = DownLoadSave.fileToObject();
+			if(downLoadBean == null){
+				downLoadBean = new DownLoadBean();
+				downLoadBean.setDownLoadJiaban(0);
+				downLoadBean.setDownLoadTiaoxiu(0);
+				downLoadBean.setPrintJiaban(0);
+				downLoadBean.setPrintTiaoxiu(0);
+			}
+			downLoadBean.setPrintTiaoxiu(downLoadBean.getPrintTiaoxiu() + 1);
+			DownLoadSave.objectToFile(downLoadBean);
 		}
 	%>	
   </head>

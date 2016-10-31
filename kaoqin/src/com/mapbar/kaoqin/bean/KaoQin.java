@@ -8,6 +8,7 @@ public class KaoQin {
 	private String isHoliday;
 	private String color;
 	private String holidayName;
+	private int inTenMin;
 	
 	public String getHolidayName() {
 		return holidayName;
@@ -45,7 +46,12 @@ public class KaoQin {
 	public void setColor(String color) {
 		this.color = color;
 	}
-	
+	public int getInTenMin() {
+		return inTenMin;
+	}
+	public void setInTenMin(int inTenMin) {
+		this.inTenMin = inTenMin;
+	}
 	@Override
 	public int hashCode() {
 		return date.hashCode();

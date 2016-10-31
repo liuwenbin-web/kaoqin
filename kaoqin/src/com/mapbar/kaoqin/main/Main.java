@@ -56,7 +56,6 @@ public class Main {
 			}else{
 				content += dateString + " 无记录";
 			}
-			System.out.println(content);
 			FileUtil.write("/Users/liuwenbin/Desktop/考勤文件整理.txt", content);
 		}
 	}

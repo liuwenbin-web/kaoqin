@@ -43,22 +43,26 @@ public class ReadExcel {
 			ex.printStackTrace();
 		}
 		//正式删除--开始
-		/*result = new ArrayList<String>();
-		int year = 2016;
-		int month = 9;
-		Calendar c = Calendar.getInstance();
-		c.set(Calendar.YEAR, year); // 2010年
-		c.set(Calendar.MONTH, month - 1);
-		int allDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-		for(int day = 1;day<=allDays;day++){
-			if("/3/4/10/11/15/16/17/24/25/".contains("/"+day+"/")){
-				continue;
-			}
-			result.add(year+"-"+month+"-"+day+" 8:55");
-			result.add(year+"-"+month+"-"+day+" 18:55");
-		}
-		System.out.println(new Gson().toJson(result));*/
-		
+//		result = new ArrayList<String>();
+//		int year = 2016;
+//		int month = 9;
+//		Calendar c = Calendar.getInstance();
+//		c.set(Calendar.YEAR, year); // 2010年
+//		c.set(Calendar.MONTH, month - 1);
+//		int allDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+//		for(int day = 1;day<=allDays-1;day++){
+//			if("/3/4/10/11/15/16/17/24/25/".contains("/"+day+"/")){
+//				continue;
+//			}
+//			if(day == 12){
+//				result.add(year+"-"+month+"-"+day+" 9:05");
+//				result.add(year+"-"+month+"-"+day+" 18:55");
+//			}else{
+//				//result.add(year+"-"+month+"-"+day+" 8:55");
+//				result.add(year+"-"+month+"-"+day+" 9:05");
+//				result.add(year+"-"+month+"-"+day+" 18:55");
+//			}
+//		}
 		//result.add("2016-9-13 15:25");
 		//result.add("2016-9-13 18:05");
 		//正式删除--结束
